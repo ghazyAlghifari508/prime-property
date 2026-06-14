@@ -1,0 +1,209 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Prime Property — Design System (AC-1.1)
+  Primary Black #1A1A1A · Accent Gold #C9A961 · Accent Red #B33A3A
+  Neutral White #FFFFFF · Soft Gray #F5F5F5
+*/
+
+:root {
+  --radius: 0.625rem;
+
+  /* Brand palette */
+  --prime-black: #1a1a1a;
+  --prime-gold: #c9a961;
+  --prime-gold-dark: #b08f48;
+  --prime-red: #b33a3a;
+  --prime-white: #ffffff;
+  --soft-gray: #f5f5f5;
+
+  /* shadcn semantic tokens mapped to brand */
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+  --primary: #1a1a1a;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #1a1a1a;
+  --muted: #f5f5f5;
+  --muted-foreground: #6b6b6b;
+  --accent: #c9a961;
+  --accent-foreground: #1a1a1a;
+  --destructive: #b33a3a;
+  --destructive-foreground: #ffffff;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #c9a961;
+
+  /* Status badge colors (AC-7.1) */
+  --status-instock-bg: #dcfce7;
+  --status-instock-fg: #166534;
+  --status-soldout-bg: #fde2e2;
+  --status-soldout-fg: #b33a3a;
+  --status-siaphuni-bg: #fdf3d8;
+  --status-siaphuni-fg: #8a6d1f;
+  --status-siapkosong-bg: #ede9fe;
+  --status-siapkosong-fg: #6d28d9;
+  --status-renovasi-bg: #ffedd5;
+  --status-renovasi-fg: #9a3412;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand colors as Tailwind utilities (e.g. bg-prime-black, text-prime-gold) */
+  --color-prime-black: var(--prime-black);
+  --color-prime-gold: var(--prime-gold);
+  --color-prime-gold-dark: var(--prime-gold-dark);
+  --color-prime-red: var(--prime-red);
+  --color-prime-white: var(--prime-white);
+  --color-soft-gray: var(--soft-gray);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Focus ring consistency */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ===== Luxury / editorial helpers ===== */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Teks dengan gradasi emas mewah */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #e7cd8c 0%, #c9a961 45%, #a8863f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Garis pemisah emas tipis */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--prime-gold),
+    transparent
+  );
+}
+
+/* Label kecil huruf kapital berjarak (eyebrow) */
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+/* Animasi masuk halus (reveal) */
+@keyframes lux-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lux-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lux-zoom {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.animate-fade-up {
+  animation: lux-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade {
+  animation: lux-fade 1.2s ease both;
+}
+
+.animate-zoom-slow {
+  animation: lux-zoom 8s ease-out both;
+}
+
+/* delay util untuk stagger */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+.delay-200 {
+  animation-delay: 0.2s;
+}
+.delay-300 {
+  animation-delay: 0.3s;
+}
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade,
+  .animate-zoom-slow {
+    animation: none;
+  }
+}

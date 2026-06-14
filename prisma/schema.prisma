@@ -1,0 +1,144 @@
+// Prisma schema — Prime Property (Phase 2 backend)
+// Skema dikelola via Supabase MCP migration; file ini selaras dengan DB.
+// `prisma generate` → membuat client. Migrasi DDL TIDAK dijalankan Prisma (hindari drift).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  superadmin
+
+  @@map("role")
+}
+
+enum Tipe {
+  Ruko
+  Villa
+
+  @@map("tipe")
+}
+
+enum StatusProperty {
+  in_stock
+  sold_out
+
+  @@map("status_property")
+}
+
+enum Siap {
+  siap_huni
+  siap_kosong
+  siap_huni_renovasi
+
+  @@map("siap")
+}
+
+enum AuditAction {
+  create
+  update
+  delete
+  restore
+
+  @@map("audit_action")
+}
+
+model User {
+  id            String     @id @default(uuid()) @db.Uuid
+  nama          String
+  email         String     @unique
+  passwordHash  String     @map("password_hash")
+  role          Role       @default(admin)
+  isActive      Boolean    @default(true) @map("is_active")
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  sessions      Session[]
+  properties    Property[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model Property {
+  id           String         @id @default(uuid()) @db.Uuid
+  namaProperty String         @map("nama_property")
+  group        String?
+  lebar        Decimal        @db.Decimal(6, 2)
+  panjang      Decimal        @db.Decimal(6, 2)
+  hadap        String[]
+  tipe         Tipe
+  tingkat      Decimal        @db.Decimal(3, 1)
+  price        BigInt
+  carport      Boolean        @default(false)
+  status       StatusProperty @default(in_stock)
+  siap         Siap           @default(siap_huni)
+  mapsLink     String?        @map("maps_link")
+  kawasan      String[]
+  unit         String?
+  imageUrl     String?        @map("image_url")
+  createdBy    String?        @map("created_by") @db.Uuid
+  creator      User?          @relation(fields: [createdBy], references: [id])
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?      @map("deleted_at") @db.Timestamptz(6)
+
+  @@index([deletedAt])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("properties")
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model LoginAttempt {
+  id          String   @id @default(uuid()) @db.Uuid
+  email       String
+  ipAddress   String?  @map("ip_address")
+  success     Boolean  @default(false)
+  attemptedAt DateTime @default(now()) @map("attempted_at") @db.Timestamptz(6)
+
+  @@index([email, attemptedAt(sort: Desc)])
+  @@map("login_attempts")
+}
+
+model AuditLog {
+  id           String      @id @default(uuid()) @db.Uuid
+  userId       String?     @map("user_id") @db.Uuid
+  user         User?       @relation(fields: [userId], references: [id])
+  userNama     String      @map("user_nama")
+  propertyId   String?     @map("property_id") @db.Uuid
+  propertyNama String      @map("property_nama")
+  action       AuditAction
+  changes      Json        @default("[]")
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  nama      String
+  email     String
+  noHp      String   @map("no_hp")
+  pesan     String
+  ipAddress String?  @map("ip_address")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("contact_messages")
+}
