@@ -46,16 +46,18 @@ export function PublicHeader() {
           aria-label="Prime Property — Beranda"
           className="flex items-center"
         >
-          <span className="rounded-sm bg-white px-4 py-2">
+          {/* Efek glow putih halus di belakang logo PNG tanpa kotak badge */}
+          <div className="relative flex items-center justify-center">
+            <div className="absolute inset-0 bg-white/70 blur-md rounded-full scale-125" />
             <Image
               src="/logo-prime-property.png"
               alt="Prime Property"
               width={160}
               height={44}
               priority
-              className="h-10 w-auto object-contain"
+              className="relative h-10 w-auto object-contain"
             />
-          </span>
+          </div>
         </Link>
 
         {/* Desktop nav */}

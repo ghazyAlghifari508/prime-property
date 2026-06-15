@@ -184,7 +184,7 @@ export default function LandingPage() {
 
         <div className="relative mx-auto w-full max-w-7xl px-4 pt-28 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <h1 className="animate-fade-up mt-6 font-bold text-5xl leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+            <h1 className="animate-fade-up mt-6 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
               Temukan Properti Impian,
               <br />
               <span className="text-gold-gradient">Investasi</span> Terbaik Anda
