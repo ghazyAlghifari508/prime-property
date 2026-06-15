@@ -182,7 +182,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-7xl px-4 pt-28 sm:px-6 lg:px-8">
+        <div className="relative mx-auto w-full max-w-7xl px-4 pt-18 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="animate-fade-up mt-6 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
               Temukan Properti Impian,
