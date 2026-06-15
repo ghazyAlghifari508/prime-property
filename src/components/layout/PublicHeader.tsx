@@ -46,16 +46,14 @@ export function PublicHeader() {
           aria-label="Prime Property — Beranda"
           className="flex items-center"
         >
-          <div className="flex items-center justify-center rounded-sm bg-white/15 px-3 py-1.5 ring-1 ring-white/25 backdrop-blur-sm">
-            <Image
-              src="/logo-prime-property.png"
-              alt="Prime Property"
-              width={160}
-              height={44}
-              priority
-              className="h-10 w-auto object-contain"
-            />
-          </div>
+          <Image
+            src="/logo-prime-property.png"
+            alt="Prime Property"
+            width={160}
+            height={44}
+            priority
+            className="h-10 w-auto object-contain"
+          />
         </Link>
 
         {/* Desktop nav */}
