@@ -61,15 +61,14 @@ export default function AgentLoginPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
 
         <div className="relative flex h-full flex-col justify-between p-12">
-          <span className="inline-flex w-fit rounded-sm bg-white px-4 py-2.5">
-            <Image
-              src="/logo-prime-property.png"
-              alt="Prime Property"
-              width={150}
-              height={40}
-              className="h-9 w-auto object-contain"
-            />
-          </span>
+          <Image
+            src="/logo-prime-property.png"
+            alt="Prime Property"
+            width={180}
+            height={50}
+            priority
+            className="h-12 w-auto object-contain invert brightness-0"
+          />
 
           <div className="max-w-md">
             <p className="eyebrow text-prime-gold">Portal Internal</p>
