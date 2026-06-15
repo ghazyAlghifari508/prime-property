@@ -53,7 +53,7 @@ export default function CreatePropertyPage() {
             Kembali
           </Link>
         </Button>
-        <h1 className="mt-1 font-display text-3xl font-semibold text-prime-black">
+        <h1 className="mt-1 font-bold text-3xl font-semibold text-prime-black">
           Tambah Properti
         </h1>
         <p className="text-sm text-muted-foreground">

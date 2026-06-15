@@ -30,7 +30,7 @@ export default async function AdminManagementPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl font-semibold text-prime-black">
+          <h1 className="font-bold text-3xl font-semibold text-prime-black">
             Manajemen Admin
           </h1>
           <p className="text-sm text-muted-foreground">

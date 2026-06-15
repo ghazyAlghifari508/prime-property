@@ -64,7 +64,7 @@ export default async function PropertyDetailPage({
             </Link>
           </Button>
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="font-display text-3xl font-semibold text-prime-black">
+            <h1 className="font-bold text-3xl font-semibold text-prime-black">
               {property.nama_property}
             </h1>
             <StatusBadge status={property.status} />

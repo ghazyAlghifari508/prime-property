@@ -33,7 +33,7 @@ export function ProcessSteps() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <p className="eyebrow text-prime-gold">Cara Kerja</p>
-          <h2 className="mt-4 font-display text-4xl font-medium text-white sm:text-5xl">
+          <h2 className="mt-4 font-bold text-4xl font-medium text-white sm:text-5xl">
             Proses yang Mudah
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/60">
@@ -54,10 +54,10 @@ export function ProcessSteps() {
               <div className="mx-auto flex size-16 items-center justify-center rounded-full border border-prime-gold/30 bg-prime-black">
                 <s.icon className="size-7 text-prime-gold" />
               </div>
-              <span className="mt-5 block font-display text-sm font-medium tracking-widest text-prime-gold/60">
+              <span className="mt-5 block font-bold text-sm font-medium tracking-widest text-prime-gold/60">
                 {s.no}
               </span>
-              <h3 className="mt-2 font-display text-2xl font-medium text-white">
+              <h3 className="mt-2 font-bold text-2xl font-medium text-white">
                 {s.title}
               </h3>
               <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-white/60">

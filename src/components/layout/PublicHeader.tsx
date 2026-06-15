@@ -40,19 +40,22 @@ export function PublicHeader() {
       )}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Logo pada chip terang agar kontras di header gelap */}
         <Link
           href="/"
           aria-label="Prime Property — Beranda"
           className="flex items-center"
         >
-          <Image
-            src="/logo-prime-property.png"
-            alt="Prime Property"
-            width={160}
-            height={44}
-            priority
-            className="h-9 w-auto object-contain"
-          />
+          <span className="rounded-sm bg-white px-4 py-2">
+            <Image
+              src="/logo-prime-property.png"
+              alt="Prime Property"
+              width={160}
+              height={44}
+              priority
+              className="h-10 w-auto object-contain"
+            />
+          </span>
         </Link>
 
         {/* Desktop nav */}

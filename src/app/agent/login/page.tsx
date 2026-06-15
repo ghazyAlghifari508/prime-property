@@ -73,7 +73,7 @@ export default function AgentLoginPage() {
 
           <div className="max-w-md">
             <p className="eyebrow text-prime-gold">Portal Internal</p>
-            <h1 className="mt-4 font-display text-4xl font-medium leading-tight text-white xl:text-5xl">
+            <h1 className="mt-4 font-bold text-4xl font-medium leading-tight text-white xl:text-5xl">
               Kelola properti dengan{" "}
               <span className="text-gold-gradient">mudah & terpercaya</span>
             </h1>
@@ -108,7 +108,7 @@ export default function AgentLoginPage() {
           </div>
 
           <div className="mb-8">
-            <h2 className="font-display text-3xl font-semibold text-prime-black">
+            <h2 className="font-bold text-3xl font-semibold text-prime-black">
               Selamat Datang
             </h2>
             <p className="mt-1.5 text-sm text-muted-foreground">

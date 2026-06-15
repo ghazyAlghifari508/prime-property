@@ -23,7 +23,7 @@ export function PropertyTypes() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-14 text-center">
           <p className="eyebrow text-prime-gold">Kategori</p>
-          <h2 className="mt-4 font-display text-4xl font-medium text-white sm:text-5xl">
+          <h2 className="mt-4 font-bold text-4xl font-medium text-white sm:text-5xl">
             Pilih Tipe Properti Anda
           </h2>
         </div>
@@ -46,7 +46,7 @@ export function PropertyTypes() {
 
               <div className="absolute inset-0 flex flex-col justify-end p-8 lg:p-10">
                 <span className="eyebrow mb-3 text-prime-gold">{t.tag}</span>
-                <h3 className="font-display text-4xl font-semibold text-white lg:text-5xl">
+                <h3 className="font-bold text-4xl font-semibold text-white lg:text-5xl">
                   {t.name}
                 </h3>
                 <p className="mt-3 max-w-md text-sm leading-relaxed text-white/70">

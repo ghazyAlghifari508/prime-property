@@ -84,7 +84,6 @@
   --color-soft-gray: var(--soft-gray);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display), ui-serif, Georgia, serif;
   --font-mono: ui-monospace, monospace;
 
   --radius-sm: calc(var(--radius) - 4px);

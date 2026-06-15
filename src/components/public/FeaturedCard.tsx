@@ -47,7 +47,7 @@ export function FeaturedCard({ property }: { property: Property }) {
           <span className="line-clamp-1">{property.kawasan.join(" · ")}</span>
         </div>
 
-        <h3 className="font-display text-2xl font-semibold leading-tight text-white">
+        <h3 className="font-bold text-2xl font-semibold leading-tight text-white">
           {property.nama_property}
         </h3>
 

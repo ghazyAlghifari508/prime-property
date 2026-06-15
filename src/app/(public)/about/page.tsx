@@ -45,7 +45,7 @@ export default function AboutPage() {
         />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="eyebrow text-prime-gold">Tentang Kami</p>
-          <h1 className="mt-5 max-w-4xl font-display text-4xl font-medium leading-[1.1] text-white sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 max-w-4xl font-bold text-4xl font-medium leading-[1.1] text-white sm:text-5xl lg:text-6xl">
             Mitra Terpercaya untuk Properti{" "}
             <span className="text-gold-gradient">Impian</span> Anda
           </h1>
@@ -58,7 +58,7 @@ export default function AboutPage() {
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8">
           <div className="space-y-6">
             <p className="eyebrow text-prime-gold">Profil Perusahaan</p>
-            <h2 className="font-display text-3xl font-medium text-white sm:text-4xl">
+            <h2 className="font-bold text-3xl font-medium text-white sm:text-4xl">
               Lebih dari sekadar properti
             </h2>
             <p className="text-sm leading-relaxed text-white/65">
@@ -87,7 +87,7 @@ export default function AboutPage() {
             />
             {/* kutipan overlay */}
             <blockquote className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-8 lg:p-10">
-              <p className="font-display text-xl font-medium italic leading-relaxed text-white">
+              <p className="font-bold text-xl font-medium italic leading-relaxed text-white">
                 &ldquo;Kami percaya setiap orang berhak mendapatkan properti
                 terbaik dengan proses yang jujur dan tanpa kerumitan.&rdquo;
               </p>
@@ -106,7 +106,7 @@ export default function AboutPage() {
             <div className="mb-5 flex size-14 items-center justify-center border border-prime-gold/30">
               <Eye className="size-7 text-prime-gold" />
             </div>
-            <h3 className="font-display text-2xl font-medium text-white">
+            <h3 className="font-bold text-2xl font-medium text-white">
               Visi
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-white/60">
@@ -120,7 +120,7 @@ export default function AboutPage() {
             <div className="mb-5 flex size-14 items-center justify-center border border-prime-gold/30">
               <Target className="size-7 text-prime-gold" />
             </div>
-            <h3 className="font-display text-2xl font-medium text-white">
+            <h3 className="font-bold text-2xl font-medium text-white">
               Misi
             </h3>
             <ul className="mt-4 space-y-3 text-sm leading-relaxed text-white/60">
@@ -145,7 +145,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-14 text-center">
             <p className="eyebrow text-prime-gold">Prinsip Kami</p>
-            <h2 className="mt-4 font-display text-3xl font-medium text-white sm:text-4xl">
+            <h2 className="mt-4 font-bold text-3xl font-medium text-white sm:text-4xl">
               Nilai Perusahaan
             </h2>
           </div>
@@ -158,7 +158,7 @@ export default function AboutPage() {
                 <div className="mx-auto mb-5 flex size-16 items-center justify-center border border-prime-gold/30 transition-colors group-hover:border-prime-gold group-hover:bg-prime-gold/10">
                   <n.icon className="size-7 text-prime-gold" />
                 </div>
-                <h3 className="font-display text-lg font-medium text-white">
+                <h3 className="font-bold text-lg font-medium text-white">
                   {n.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/55">

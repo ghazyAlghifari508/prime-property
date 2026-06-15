@@ -51,7 +51,7 @@ export default function ContactPage() {
         />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="eyebrow text-prime-gold">Kontak</p>
-          <h1 className="mt-5 max-w-4xl font-display text-4xl font-medium leading-[1.1] text-white sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 max-w-4xl font-bold text-4xl font-medium leading-[1.1] text-white sm:text-5xl lg:text-6xl">
             Mari <span className="text-gold-gradient">Terhubung</span> dengan
             Kami
           </h1>
@@ -70,7 +70,7 @@ export default function ContactPage() {
           <div className="space-y-10">
             <div>
               <p className="eyebrow text-prime-gold">Informasi</p>
-              <h2 className="mt-4 font-display text-3xl font-medium text-white">
+              <h2 className="mt-4 font-bold text-3xl font-medium text-white">
                 Temukan Kami
               </h2>
             </div>
@@ -122,7 +122,7 @@ export default function ContactPage() {
           {/* Form */}
           <div className="border border-white/10 bg-[#111] p-7 sm:p-10">
             <p className="eyebrow text-prime-gold">Formulir</p>
-            <h2 className="mt-4 font-display text-3xl font-medium text-white">
+            <h2 className="mt-4 font-bold text-3xl font-medium text-white">
               Kirim Pesan
             </h2>
             <p className="mt-2 text-sm text-white/50">

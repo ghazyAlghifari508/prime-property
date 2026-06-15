@@ -10,13 +10,15 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3 lg:px-8">
         {/* Brand */}
         <div className="space-y-5">
-          <Image
-            src="/logo-prime-property.png"
-            alt="Prime Property"
-            width={160}
-            height={44}
-            className="h-10 w-auto object-contain"
-          />
+          <span className="inline-block rounded-sm bg-white px-4 py-2.5">
+            <Image
+              src="/logo-prime-property.png"
+              alt="Prime Property"
+              width={180}
+              height={50}
+              className="h-12 w-auto object-contain"
+            />
+          </span>
           <p className="max-w-xs text-sm leading-relaxed text-white/60">
             Properti pilihan, investasi terpercaya. Koleksi ruko dan villa
             terkurasi di kawasan paling strategis.

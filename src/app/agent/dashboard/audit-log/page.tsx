@@ -55,7 +55,7 @@ export default async function AuditLogPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-3xl font-semibold text-prime-black">
+        <h1 className="font-bold text-3xl font-semibold text-prime-black">
           Audit Log
         </h1>
         <p className="text-sm text-muted-foreground">

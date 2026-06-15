@@ -40,4 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
+# Project specific private / docs
+graphify-out/
+CLAUDE.md
+AGENTS.md
+startdocs/
+.claude/
+.mcp.json

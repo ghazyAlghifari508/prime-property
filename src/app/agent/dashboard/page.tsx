@@ -42,7 +42,7 @@ export default async function DashboardPage({
       {/* Heading */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl font-semibold text-prime-black">
+          <h1 className="font-bold text-3xl font-semibold text-prime-black">
             Daftar Properti
           </h1>
           <p className="text-sm text-muted-foreground">
