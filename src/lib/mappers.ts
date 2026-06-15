@@ -1,5 +1,6 @@
 // Map row Prisma → tipe domain UI (src/lib/types.ts).
 // Konversi Decimal/BigInt/Date agar aman dikirim ke Client Component.
+// Validasi server-side untuk enum values.
 
 import type {
   AuditLog as PrismaAuditLog,
@@ -13,6 +14,19 @@ import type {
   Siap,
   User,
 } from "./types";
+import { HADAP_OPTIONS, KAWASAN_OPTIONS } from "./constants";
+
+/** Validasi & sanitasi array hadap — hanya nilai enum yang diperbolehkan. */
+function sanitizeHadap(raw: string[]): Hadap[] {
+  const valid = new Set<string>(HADAP_OPTIONS);
+  return raw.filter((v) => valid.has(v)) as Hadap[];
+}
+
+/** Validasi & sanitasi array kawasan — hanya nilai dari KAWASAN_OPTIONS. */
+function sanitizeKawasan(raw: string[]): string[] {
+  const valid = new Set<string>(KAWASAN_OPTIONS);
+  return raw.filter((v) => valid.has(v));
+}
 
 export function mapProperty(p: PrismaProperty): Property {
   return {
@@ -21,15 +35,15 @@ export function mapProperty(p: PrismaProperty): Property {
     group: p.group,
     lebar: Number(p.lebar),
     panjang: Number(p.panjang),
-    hadap: p.hadap as Hadap[],
+    hadap: sanitizeHadap(p.hadap),
     tipe: p.tipe,
     tingkat: Number(p.tingkat),
-    price: Number(p.price), // bigint → number (nilai rupiah dalam range aman JS)
+    price: Number(p.price),
     carport: p.carport,
     status: p.status,
     siap: p.siap as Siap,
     maps_link: p.mapsLink,
-    kawasan: p.kawasan,
+    kawasan: sanitizeKawasan(p.kawasan),
     unit: p.unit,
     image_url: p.imageUrl,
     created_at: p.createdAt.toISOString(),

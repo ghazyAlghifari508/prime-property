@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { FilterChips } from "@/components/common/FilterChips";
 import { PropertyFilters } from "@/components/property/PropertyFilters";
@@ -28,7 +28,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  applyFilters,
   countActiveFilters,
+  DEFAULT_FILTER,
   filtersToParams,
   type PropertyFilterState,
   type SortKey,
@@ -38,45 +40,49 @@ import type { Property } from "@/lib/types";
 
 interface Props {
   initialFilters: PropertyFilterState;
-  items: Property[];
-  total: number;
+  allItems: Property[];
   highlightId?: string;
 }
 
 export function DashboardListingClient({
   initialFilters,
-  items,
-  total,
+  allItems,
   highlightId,
 }: Props) {
-  const router = useRouter();
   const pathname = usePathname();
-  const filters = initialFilters;
 
-  const [searchText, setSearchText] = useState(filters.q);
+  // State filter lokal — perubahan TIDAK trigger router navigate (AC-7.2)
+  const [filters, setFilters] = useState<PropertyFilterState>(initialFilters);
+  const [searchText, setSearchText] = useState(initialFilters.q);
+  // Snapshot of initialFilters for back/forward detection: effect sets it to next
+  const [knownFiltersKey, setKnownFiltersKey] = useState(() =>
+    JSON.stringify(initialFilters),
+  );
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Re-sync jika initialFilters dari server berubah (misal dari navigasi browser back/forward)
+  // Detects change via stringified comparison to avoid sync setState lint rule.
+  const nextKey = JSON.stringify(initialFilters);
+  if (nextKey !== knownFiltersKey) {
+    setFilters(initialFilters);
+    setSearchText(initialFilters.q);
+    setKnownFiltersKey(nextKey);
+  }
+
+  // Sinkron URL secara silent via useEffect — tidak boleh di dalam setFilters updater (AC-7.2)
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSearchText(filters.q);
-  }, [filters.q]);
+    const qs = filtersToParams(filters).toString();
+    const url = qs ? `${pathname}?${qs}` : pathname;
+    window.history.replaceState(null, "", url);
+  }, [filters, pathname]);
 
-  const pushFilters = useCallback(
-    (next: PropertyFilterState) => {
-      const qs = filtersToParams(next).toString();
-      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-    },
-    [pathname, router],
-  );
-
-  const patchFilters = useCallback(
-    (patch: Partial<PropertyFilterState>) => {
-      const next = { ...filters, ...patch };
+  const patchFilters = (patch: Partial<PropertyFilterState>) => {
+    setFilters((prev) => {
+      const next = { ...prev, ...patch };
       if (!("page" in patch)) next.page = 1;
-      pushFilters(next);
-    },
-    [filters, pushFilters],
-  );
+      return next;
+    });
+  };
 
   function handleSearchChange(value: string) {
     setSearchText(value);
@@ -87,21 +93,38 @@ export function DashboardListingClient({
   }
 
   function handleSort(key: SortKey) {
-    if (filters.sort === key) {
-      patchFilters({ dir: filters.dir === "asc" ? "desc" : "asc" });
-    } else {
-      patchFilters({ sort: key, dir: "asc" });
-    }
+    setFilters((prev) => {
+      const next = { ...prev };
+      if (next.sort === key) {
+        next.dir = next.dir === "asc" ? "desc" : "asc";
+      } else {
+        next.sort = key;
+        next.dir = "asc";
+      }
+      next.page = 1;
+      return next;
+    });
   }
 
   function handleReset() {
     setSearchText("");
-    router.replace(pathname, { scroll: false });
+    setFilters((prev) => ({ ...DEFAULT_FILTER, pageSize: prev.pageSize }));
   }
 
-  const activeCount = countActiveFilters(filters);
+  // ===== Filter & pagination 100% client-side (AC-7.2 real-time) =====
+
+  const filtered = useMemo(() => applyFilters(allItems, filters), [allItems, filters]);
+
+  const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / filters.pageSize));
   const page = Math.min(filters.page, totalPages);
+
+  const pageItems = useMemo(() => {
+    const start = (page - 1) * filters.pageSize;
+    return filtered.slice(start, start + filters.pageSize);
+  }, [filtered, page, filters.pageSize]);
+
+  const activeCount = countActiveFilters(filters);
 
   return (
     <div className="flex gap-6">
@@ -161,9 +184,14 @@ export function DashboardListingClient({
         {/* Chip filter aktif */}
         <FilterChips filters={filters} onChange={patchFilters} />
 
+        {/* Info hasil */}
+        <p className="text-sm text-muted-foreground">
+          Menampilkan {total} properti
+        </p>
+
         {/* Tabel */}
         <PropertyTable
-          items={items}
+          items={pageItems}
           sort={filters.sort}
           dir={filters.dir}
           onSort={handleSort}

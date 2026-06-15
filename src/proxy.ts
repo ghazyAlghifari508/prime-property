@@ -4,12 +4,11 @@ import type { NextRequest } from "next/server";
 // Next 16: "Proxy" (dahulu Middleware). Optimistic check — proteksi penuh
 // (validasi session di DB) tetap di Server Component/Action (auth.ts).
 // AC-5.1: cegah akses /agent/* tanpa cookie session.
+// AC-9.2: Global rate limit 100 req/menit/IP, auth rate limit 10 req/menit/IP, CSRF protection.
 
 const SESSION_COOKIE = "pp_session";
 
 // ===== Rate limit global (AC-9.2): 100 req/menit/IP =====
-// In-memory sliding window — cukup untuk dev/single-instance.
-// TODO(prod): pindah ke Redis/Upstash agar konsisten lintas instance serverless.
 const RATE_MAX = 100;
 const RATE_WINDOW_MS = 60 * 1000;
 const ipHits = new Map<string, number[]>();
@@ -22,24 +21,63 @@ function clientIp(request: NextRequest): string {
   );
 }
 
-function isRateLimited(ip: string): boolean {
+function isRateLimited(ip: string, max = RATE_MAX, windowMs = RATE_WINDOW_MS): boolean {
   const now = Date.now();
-  const hits = (ipHits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  const hits = (ipHits.get(ip) ?? []).filter((t) => now - t < windowMs);
   hits.push(now);
   ipHits.set(ip, hits);
-  return hits.length > RATE_MAX;
+  return hits.length > max;
 }
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Rate limit global untuk semua request yang melewati proxy.
+  // AC-9.2: Global rate limit untuk semua request
   const ip = clientIp(request);
   if (isRateLimited(ip)) {
     return new NextResponse("Terlalu banyak permintaan. Coba lagi nanti.", {
       status: 429,
       headers: { "Retry-After": "60" },
     });
+  }
+
+  // AC-9.2: Auth rate limit 10 req/menit/IP
+  if (pathname.startsWith("/agent/login")) {
+    if (isRateLimited(`a:${ip}`, 10, 60_000)) {
+      return new NextResponse(
+        "Terlalu banyak percobaan login. Silakan coba lagi nanti.",
+        { status: 429, headers: { "Retry-After": "60" } },
+      );
+    }
+  }
+
+  // AC-9.2: CSRF protection untuk semua mutasi (POST/PUT/PATCH/DELETE)
+  if (["POST", "PUT", "PATCH", "DELETE"].includes(request.method)) {
+    const origin = request.headers.get("origin");
+    const referer = request.headers.get("referer");
+    const host = request.headers.get("host");
+
+    let valid = false;
+    if (origin && host) {
+      try {
+        valid = new URL(origin).host === host;
+      } catch {
+        valid = false;
+      }
+    } else if (referer && host) {
+      try {
+        valid = new URL(referer).host === host;
+      } catch {
+        valid = false;
+      }
+    }
+
+    if (!valid) {
+      return new NextResponse(
+        JSON.stringify({ error: "CSRF validation failed." }),
+        { status: 403, headers: { "Content-Type": "application/json" } },
+      );
+    }
   }
 
   const hasSession = Boolean(request.cookies.get(SESSION_COOKIE)?.value);
@@ -64,6 +102,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Rate limit global berlaku di semua route kecuali aset statis & internal Next.
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp)$).*)"],
 };

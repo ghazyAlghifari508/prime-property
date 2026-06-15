@@ -60,7 +60,8 @@ Sistem WAJIB menggunakan palette warna yang konsisten dengan logo Prime Property
 ### AC-2.3 Navigasi Header
 
 - Header sticky di seluruh halaman publik.
-- Urutan menu (kiri ke kanan): Logo | Beranda | Tentang Kami | Kontak | tombol "Login Agent" (di kanan, style outline emas).
+- Urutan menu (kiri ke kanan): Logo | Beranda | Tentang Kami | Kontak.
+- Halaman login internal (`/agent/login`) tidak memiliki link dari navigasi publik — diakses langsung via URL.
 
 ---
 

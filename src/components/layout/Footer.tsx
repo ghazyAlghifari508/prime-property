@@ -68,7 +68,6 @@ export function Footer() {
               { href: "/", label: "Beranda" },
               { href: "/about", label: "Tentang Kami" },
               { href: "/contact", label: "Kontak" },
-              { href: "/agent/login", label: "Login Agent" },
             ].map((l) => (
               <li key={l.href}>
                 <Link

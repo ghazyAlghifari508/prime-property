@@ -21,16 +21,6 @@ function buildWhere(f: Partial<PropertyFilterState>): Prisma.PropertyWhereInput 
   const where: Prisma.PropertyWhereInput = { deletedAt: null };
   const and: Prisma.PropertyWhereInput[] = [];
 
-  if (f.q && f.q.trim()) {
-    const q = f.q.trim();
-    and.push({
-      OR: [
-        { namaProperty: { contains: q, mode: "insensitive" } },
-        { group: { contains: q, mode: "insensitive" } },
-        { kawasan: { has: q } },
-      ],
-    });
-  }
   if (f.kawasan && f.kawasan.length) where.kawasan = { hasSome: f.kawasan };
   if (f.hadap && f.hadap.length) where.hadap = { hasSome: f.hadap };
   if (f.siap && f.siap.length) where.siap = { in: f.siap };
@@ -62,6 +52,15 @@ function buildOrderBy(
   }
 }
 
+/** Ambil SEMUA properti aktif (tanpa filter/sort/pagination) — untuk client-side filtering real-time (AC-7.2). */
+export async function listAllProperties(): Promise<Property[]> {
+  const rows = await prisma.property.findMany({
+    where: { deletedAt: null },
+    orderBy: { createdAt: "desc" },
+  });
+  return rows.map(mapProperty);
+}
+
 export async function listProperties(
   f: Partial<PropertyFilterState>,
 ): Promise<ListResult> {
@@ -71,14 +70,46 @@ export async function listProperties(
     : 50;
   const page = Math.max(1, f.page ?? 1);
 
+  // Kawasan partial text search via raw SQL (Prisma `has` hanya exact match).
+  let kawasanIds: string[] = [];
+  if (f.q && f.q.trim()) {
+    const q = f.q.trim();
+    const raw = await prisma.$queryRawUnsafe<{ id: string }[]>(
+      `SELECT id FROM properties WHERE deleted_at IS NULL AND EXISTS (
+        SELECT 1 FROM unnest(kawasan) k WHERE k ILIKE '%' || $1 || '%'
+      )`,
+      q,
+    );
+    kawasanIds = raw.map((r) => r.id);
+  }
+
+  // Gabungkan hasil kawasan partial ke dalam OR filter
+  const finalWhere: typeof where = { ...where };
+  if (f.q && f.q.trim()) {
+    const q = f.q.trim();
+    // Ganti rule q sebelumnya yang ditaruh di and
+    finalWhere.AND = (where.AND as Prisma.PropertyWhereInput[]).filter(
+      (cond) => !("OR" in cond)
+    );
+    const orConds: Prisma.PropertyWhereInput[] = [
+      { namaProperty: { contains: q, mode: "insensitive" } },
+      { group: { contains: q, mode: "insensitive" } },
+    ];
+    if (kawasanIds.length > 0) {
+      orConds.push({ id: { in: kawasanIds } });
+    }
+    const finalAnd = finalWhere.AND as Prisma.PropertyWhereInput[];
+    finalAnd.push({ OR: orConds });
+  }
+
   const [rows, total] = await Promise.all([
     prisma.property.findMany({
-      where,
+      where: finalWhere,
       orderBy: buildOrderBy(f),
       skip: (page - 1) * pageSize,
       take: pageSize,
     }),
-    prisma.property.count({ where }),
+    prisma.property.count({ where: finalWhere }),
   ]);
 
   return { items: rows.map(mapProperty), total };

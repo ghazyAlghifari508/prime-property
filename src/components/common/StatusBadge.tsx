@@ -1,52 +1,56 @@
-import { DoorOpen, Hammer, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SIAP_LABEL_SHORT, STATUS_LABEL } from "@/lib/constants";
 import type { Siap, StatusProperty } from "@/lib/types";
 
 /**
- * Status (AC-7.1) — gaya editorial minimalis:
- * marker kecil + teks uppercase berwarna, tanpa pill pastel.
+ * Status (AC-7.1) — badge berwarna:
+ * - In Stock → hijau muda
+ * - Sold Out → merah (#B33A3A)
  */
 export function StatusBadge({ status }: { status: StatusProperty }) {
   const inStock = status === "in_stock";
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider",
-        inStock ? "text-emerald-700" : "text-prime-red",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide whitespace-nowrap",
+        inStock
+          ? "bg-[var(--status-instock-bg)] text-[var(--status-instock-fg)]"
+          : "bg-[var(--status-soldout-bg)] text-[var(--status-soldout-fg)]",
       )}
     >
-      <span className="relative flex size-2">
-        {inStock && (
-          <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500/60" />
+      <span
+        className={cn(
+          "shrink-0 rounded-full size-1.5",
+          inStock ? "bg-[var(--status-instock-fg)]" : "bg-[var(--status-soldout-fg)]",
         )}
-        <span
-          className={cn(
-            "relative inline-flex size-2 rounded-full",
-            inStock ? "bg-emerald-500" : "bg-prime-red",
-          )}
-        />
-      </span>
+      />
       {STATUS_LABEL[status]}
     </span>
   );
 }
 
 /**
- * Kesiapan — tag netral berkelas yang dibedakan lewat IKON + aksen emas,
- * bukan tiga warna "permen".
+ * Kesiapan (AC-7.1) — badge berwarna sesuai AC:
+ * - Siap Huni → kuning/emas
+ * - Siap Kosong → ungu muda
+ * - Siap Huni (Renovasi) → oranye
  */
-const SIAP_ICON: Record<Siap, typeof Home> = {
-  siap_huni: Home,
-  siap_kosong: DoorOpen,
-  siap_huni_renovasi: Hammer,
+const SIAP_STYLE: Record<
+  Siap,
+  { bg: string; fg: string }
+> = {
+  siap_huni: { bg: "var(--status-siaphuni-bg)", fg: "var(--status-siaphuni-fg)" },
+  siap_kosong: { bg: "var(--status-siapkosong-bg)", fg: "var(--status-siapkosong-fg)" },
+  siap_huni_renovasi: { bg: "var(--status-renovasi-bg)", fg: "var(--status-renovasi-fg)" },
 };
 
 export function SiapBadge({ siap }: { siap: Siap }) {
-  const Icon = SIAP_ICON[siap];
+  const style = SIAP_STYLE[siap];
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-soft-gray/50 px-2.5 py-1 text-xs font-medium text-foreground/80">
-      <Icon className="size-3.5 text-prime-gold-dark" />
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide whitespace-nowrap"
+      style={{ backgroundColor: style.bg, color: style.fg }}
+    >
       {SIAP_LABEL_SHORT[siap]}
     </span>
   );

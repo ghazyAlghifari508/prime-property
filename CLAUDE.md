@@ -70,6 +70,12 @@ src/lib/                   # types, mock-data, mock-auth, format, constants
 - `params`/`searchParams` async — `await` di Server Component, atau `useSearchParams()` di client.
 - Pakai `next/image` untuk gambar konten, `next/link` untuk navigasi.
 
+## File Penting
+
+- `src/middleware.ts` — AC-9.2: global rate limit (100/m/IP), auth rate limit (10/m/IP), CSRF protection (origin/referer)
+- `docs/superadmin-guide.md` — panduan manajemen properti untuk superadmin
+- `prisma/schema.prisma` — skema database: User, Property, Session, LoginAttempt, AuditLog, ContactMessage
+
 ## Perintah
 
 - `npm run dev` — dev server

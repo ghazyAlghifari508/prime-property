@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -83,15 +83,7 @@ export function PublicHeader() {
           })}
         </nav>
 
-        <div className="hidden md:block">
-          <Link
-            href="/agent/login"
-            className="group inline-flex items-center gap-1.5 border border-prime-gold/60 px-5 py-2.5 text-sm tracking-wide text-prime-gold transition-all duration-300 hover:bg-prime-gold hover:text-prime-black"
-          >
-            Login Agent
-            <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
-        </div>
+        <div className="hidden md:block w-32" />
 
         {/* Mobile toggle */}
         <button
@@ -125,14 +117,6 @@ export function PublicHeader() {
                 </Link>
               );
             })}
-            <Link
-              href="/agent/login"
-              onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-1.5 border border-prime-gold/60 px-5 py-3 text-sm tracking-wide text-prime-gold"
-            >
-              Login Agent
-              <ArrowUpRight className="size-4" />
-            </Link>
           </nav>
         </div>
       )}

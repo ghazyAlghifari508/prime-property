@@ -9,9 +9,7 @@ import {
 import { LuxLink } from "@/components/public/LuxButton";
 import { FeaturedCard } from "@/components/public/FeaturedCard";
 import { PropertyTypes } from "@/components/public/PropertyTypes";
-import { AreasShowcase } from "@/components/public/AreasShowcase";
 import { ProcessSteps } from "@/components/public/ProcessSteps";
-import { Testimonials } from "@/components/public/Testimonials";
 import { getFeaturedProperties, getPropertyStats } from "@/lib/actions/properties";
 
 // Halaman ini bergantung pada data DB → SSR, bukan SSG.
@@ -107,9 +105,6 @@ export default async function LandingPage() {
 
         {/* Indikator scroll */}
         <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 animate-fade delay-500 flex-col items-center gap-2 text-white/40 lg:flex">
-          <span className="text-[0.65rem] uppercase tracking-[0.3em]">
-            Gulir
-          </span>
           <span className="h-10 w-px bg-gradient-to-b from-prime-gold to-transparent" />
         </div>
       </section>
@@ -164,9 +159,6 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ===== KAWASAN STRATEGIS ===== */}
-      <AreasShowcase />
-
       {/* ===== MENGAPA PRIME PROPERTY ===== */}
       <section className="relative overflow-hidden bg-[#111] py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -215,9 +207,6 @@ export default async function LandingPage() {
 
       {/* ===== PROSES ===== */}
       <ProcessSteps />
-
-      {/* ===== TESTIMONI ===== */}
-      <Testimonials />
 
       {/* ===== CTA PENUTUP ===== */}
       <section className="relative overflow-hidden bg-prime-black py-28">

@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { StatCard } from "@/components/common/StatCard";
 import { Button } from "@/components/ui/button";
-import { getPropertyStats, listProperties } from "@/lib/actions/properties";
+import { getPropertyStats, listAllProperties } from "@/lib/actions/properties";
 import { parseFilters } from "@/lib/property-filter";
 import { getCurrentUser } from "@/lib/auth";
 import { DashboardListingClient } from "@/components/property/DashboardListingClient";
@@ -30,8 +30,9 @@ export default async function DashboardPage({
     else if (v) urlParams.append(k, v);
   }
 
-  const filters = parseFilters(urlParams);
-  const { items, total } = await listProperties(filters);
+  const initialFilters = parseFilters(urlParams);
+  // Ambil SEMUA properti sekali — filter real-time di client (AC-7.2)
+  const allItems = await listAllProperties();
 
   const highlightId = typeof sp.highlight === "string" ? sp.highlight : undefined;
   const isSuperadmin = user?.role === "superadmin";
@@ -45,7 +46,7 @@ export default async function DashboardPage({
             Daftar Properti
           </h1>
           <p className="text-sm text-muted-foreground">
-            Menampilkan {total} dari {stats.total} properti
+            {stats.total} properti terdaftar
           </p>
         </div>
         {isSuperadmin && (
@@ -90,9 +91,8 @@ export default async function DashboardPage({
       </div>
 
       <DashboardListingClient
-        initialFilters={filters}
-        items={items}
-        total={total}
+        initialFilters={initialFilters}
+        allItems={allItems}
         highlightId={highlightId}
       />
     </div>

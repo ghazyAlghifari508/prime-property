@@ -123,7 +123,6 @@ export default function AgentLoginPage() {
                 id="email"
                 name="email"
                 type="email"
-                defaultValue="superadmin@primeproperty.id"
                 placeholder="nama@primeproperty.id"
                 autoComplete="username"
                 className="h-11"
@@ -137,7 +136,6 @@ export default function AgentLoginPage() {
                   id="password"
                   name="password"
                   type={showPwd ? "text" : "password"}
-                  defaultValue="PrimeProperty2026!"
                   placeholder="••••••••"
                   autoComplete="current-password"
                   className="h-11 pr-10"

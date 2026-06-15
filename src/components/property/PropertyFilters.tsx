@@ -26,6 +26,17 @@ interface Props {
   onReset: () => void;
 }
 
+function formatRupiahInput(value: string): string {
+  if (!value) return "";
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  return "Rp " + Number(digits).toLocaleString("id-ID");
+}
+
+function onlyDigits(value: string): string {
+  return value.replace(/\D/g, "");
+}
+
 export function PropertyFilters({ filters, onChange, onReset }: Props) {
   const activeCount = countActiveFilters(filters);
 
@@ -106,15 +117,14 @@ export function PropertyFilters({ filters, onChange, onReset }: Props) {
         </div>
         <div className="space-y-2">
           <Label htmlFor="hargaMax" className="text-xs text-muted-foreground">
-            Harga max (Rp)
+            Harga max
           </Label>
           <Input
             id="hargaMax"
-            type="number"
-            min={0}
-            step={50_000_000}
-            value={filters.hargaMax}
-            onChange={(e) => onChange({ hargaMax: e.target.value })}
+            type="text"
+            inputMode="numeric"
+            value={formatRupiahInput(filters.hargaMax)}
+            onChange={(e) => onChange({ hargaMax: onlyDigits(e.target.value) })}
             placeholder="Tanpa batas"
           />
         </div>

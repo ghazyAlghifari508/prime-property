@@ -85,7 +85,26 @@
       "Bash(BASE_URL=http://localhost:3000 HEADLESS=0 python -m pytest test_03_listing_filter.py::test_default_page_size_50 -q)",
       "Bash(BASE_URL=http://localhost:3000 HEADLESS=0 python -m pytest test_01_public_pages.py test_02_auth.py test_03_listing_filter.py test_04_crud_rbac.py test_05_contact_form.py -q)",
       "Bash(BASE_URL=http://localhost:3000 HEADLESS=0 python -m pytest test_06_security.py test_07_performance.py test_08_localization_brand.py -q -s)",
-      "Bash(BASE_URL=http://localhost:3000 HEADLESS=0 python -m pytest test_01_public_pages.py test_02_auth.py test_03_listing_filter.py test_04_crud_rbac.py test_05_contact_form.py test_07_performance.py test_08_localization_brand.py test_06_security.py -q -s)"
+      "Bash(BASE_URL=http://localhost:3000 HEADLESS=0 python -m pytest test_01_public_pages.py test_02_auth.py test_03_listing_filter.py test_04_crud_rbac.py test_05_contact_form.py test_07_performance.py test_08_localization_brand.py test_06_security.py -q -s)",
+      "Bash(rm -rf .next)",
+      "Bash(ls .next)",
+      "Bash(python .graphify_ast_extract.py)",
+      "Bash(python .graphify_semantic_extract.py)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(python3 -c \"import PyPDF2; print\\('PyPDF2 available'\\)\")",
+      "Bash(python -c \"import PyPDF2; print\\('PyPDF2 available'\\)\")",
+      "Bash(python3 -c \"import pdfminer; print\\('pdfminer available'\\)\")",
+      "Bash(python -c \"import pdfminer; print\\('pdfminer available'\\)\")",
+      "Bash(python3 -c \"import pdfplumber; print\\('pdfplumber available'\\)\")",
+      "Bash(pdftotext *)",
+      "Bash(python *)",
+      "Bash(rm -f .graphify_*.json .graphify_*.py .graphify_*.txt .graphify_python)",
+      "Bash(rm -f graphify-out/.graphify_chunk_*.json graphify-out/.needs_update)",
+      "Read(//c/Coding/Web Development/Next/**)",
+      "Bash(dir prisma\\\\seed*.mjs prisma\\\\seed*.ts prisma\\\\seed*.js)",
+      "Bash(dir prisma\\\\*.prisma)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   },
   "enabledMcpjsonServers": [

@@ -12,7 +12,7 @@ import {
   Minus,
 } from "lucide-react";
 import { SiapBadge, StatusBadge } from "@/components/common/StatusBadge";
-import { formatDimensi, formatRupiah } from "@/lib/format";
+import { formatTanggal, formatDimensi, formatRupiah } from "@/lib/format";
 import type { SortDir, SortKey } from "@/lib/property-filter";
 import type { Property } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -82,15 +82,16 @@ export function PropertyTable({
   const router = useRouter();
   const highlightRef = useRef<HTMLTableRowElement | null>(null);
   // Sorot entry baru (AC-8.1) lalu pudar setelah beberapa detik.
-  const [showHighlight, setShowHighlight] = useState(Boolean(highlightId));
+  const [dismissedHighlightId, setDismissedHighlightId] = useState<string | null>(null);
 
   useEffect(() => {
-    setShowHighlight(Boolean(highlightId));
     if (!highlightId) return;
     highlightRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
-    const t = setTimeout(() => setShowHighlight(false), 3500);
+    const t = setTimeout(() => setDismissedHighlightId(highlightId), 3500);
     return () => clearTimeout(t);
   }, [highlightId]);
+
+  const showHighlight = Boolean(highlightId && dismissedHighlightId !== highlightId);
 
   if (items.length === 0) {
     return (
@@ -120,8 +121,9 @@ export function PropertyTable({
                 active={sort === "nama"}
                 dir={dir}
                 onSort={onSort}
-                className="min-w-[220px]"
+                className="min-w-[200px]"
               />
+              <th className={cn(TH, "whitespace-nowrap")}>Group</th>
               <th className={cn(TH, "whitespace-nowrap")}>Dimensi</th>
               <th className={cn(TH, "whitespace-nowrap")}>Hadap</th>
               <th className={cn(TH, "text-center")}>Tipe</th>
@@ -145,6 +147,14 @@ export function PropertyTable({
               />
               <th className={TH}>Kesiapan</th>
               <th className={TH}>Kawasan</th>
+              <SortTh
+                label="Tanggal"
+                sortKey="tanggal"
+                active={sort === "tanggal"}
+                dir={dir}
+                onSort={onSort}
+                className="whitespace-nowrap"
+              />
             </tr>
           </thead>
           <tbody className="divide-y divide-border/70">
@@ -161,17 +171,17 @@ export function PropertyTable({
                     "animate-pulse bg-prime-gold/15 odd:bg-prime-gold/15",
                 )}
               >
-                {/* Properti: nama + group */}
+                {/* Properti: nama */}
                 <td className="relative px-4 py-3.5">
                   <span className="absolute inset-y-0 left-0 w-0.5 bg-prime-gold opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="font-semibold text-prime-black">
                     {p.nama_property}
                   </div>
-                  {p.group && (
-                    <div className="text-xs text-muted-foreground">
-                      {p.group}
-                    </div>
-                  )}
+                </td>
+
+                {/* Group */}
+                <td className="whitespace-nowrap px-4 py-3.5 text-foreground/80">
+                  {p.group ?? "—"}
                 </td>
 
                 {/* Dimensi */}
@@ -214,12 +224,12 @@ export function PropertyTable({
                 </td>
 
                 {/* Status */}
-                <td className="px-4 py-3.5">
+                <td className="px-4 py-3.5 whitespace-nowrap">
                   <StatusBadge status={p.status} />
                 </td>
 
                 {/* Kesiapan */}
-                <td className="px-4 py-3.5">
+                <td className="px-4 py-3.5 whitespace-nowrap">
                   <SiapBadge siap={p.siap} />
                 </td>
 
@@ -235,6 +245,11 @@ export function PropertyTable({
                       </span>
                     ))}
                   </div>
+                </td>
+
+                {/* Tanggal */}
+                <td className="whitespace-nowrap px-4 py-3.5 text-xs text-muted-foreground">
+                  {formatTanggal(p.created_at)}
                 </td>
               </tr>
               );
