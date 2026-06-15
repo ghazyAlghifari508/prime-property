@@ -10,14 +10,13 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3 lg:px-8">
         {/* Brand */}
         <div className="space-y-5">
-          <div className="relative inline-flex items-center justify-center">
-            <div className="absolute inset-0 bg-white/70 blur-md rounded-full scale-125" />
+          <div className="inline-flex items-center justify-center rounded-sm bg-white/15 px-3 py-2 ring-1 ring-white/25 backdrop-blur-sm">
             <Image
               src="/logo-prime-property.png"
               alt="Prime Property"
               width={180}
               height={50}
-              className="relative h-12 w-auto object-contain"
+              className="h-12 w-auto object-contain"
             />
           </div>
           <p className="max-w-xs text-sm leading-relaxed text-white/60">
