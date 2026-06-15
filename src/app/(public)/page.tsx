@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Suspense } from "react";
 import {
   ArrowUpRight,
   ShieldCheck,
@@ -12,8 +13,13 @@ import { PropertyTypes } from "@/components/public/PropertyTypes";
 import { ProcessSteps } from "@/components/public/ProcessSteps";
 import { getFeaturedProperties, getPropertyStats } from "@/lib/actions/properties";
 
-// Halaman ini bergantung pada data DB → SSR, bukan SSG.
-export const dynamic = "force-dynamic";
+// Static fallback agar hero bisa di-render tanpa nunggu DB.
+const STATS_FALLBACK = [
+  { value: "—", label: "Properti Terkurasi" },
+  { value: "—", label: "Kawasan Strategis" },
+  { value: "98%", label: "Kepuasan Klien" },
+  { value: "10+", label: "Tahun Pengalaman" },
+];
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80";
@@ -45,22 +51,124 @@ const VALUE_PROPS = [
   },
 ];
 
-export default async function LandingPage() {
-  const featuredProperties = await getFeaturedProperties(6);
-  const stats = await getPropertyStats();
+/* =========================================================
+   Component async: data dari DB di-stream terpisah supaya
+   hero section tetap bisa render duluan.
+   ========================================================= */
 
-  const STATS = [
+async function StatsSection() {
+  const stats = await getPropertyStats();
+  const items = [
     { value: `${stats.total}+`, label: "Properti Terkurasi" },
     { value: `${stats.kawasan}`, label: "Kawasan Strategis" },
     { value: "98%", label: "Kepuasan Klien" },
     { value: "10+", label: "Tahun Pengalaman" },
   ];
+  return (
+    <section className="border-y border-white/10 bg-prime-black">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
+        {items.map((s) => (
+          <div key={s.label} className="px-2 py-10 text-center lg:py-12">
+            <p className="font-display text-4xl font-semibold text-prime-gold lg:text-5xl">
+              {s.value}
+            </p>
+            <p className="mt-2 text-xs uppercase tracking-widest text-white/50">
+              {s.label}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
+async function FeaturedSection() {
+  const featuredProperties = await getFeaturedProperties(6);
+  return (
+    <section id="unggulan" className="bg-prime-black py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-14 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+          <div>
+            <p className="eyebrow text-prime-gold">Koleksi Eksklusif</p>
+            <h2 className="mt-4 font-display text-4xl font-medium text-white sm:text-5xl">
+              Properti Unggulan
+            </h2>
+          </div>
+          <p className="max-w-sm text-sm leading-relaxed text-white/60">
+            Pilihan terbaik kami — hunian dan ruang komersial premium dengan
+            lokasi yang diincar.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {featuredProperties.map((property) => (
+            <FeaturedCard key={property.id} property={property} />
+          ))}
+        </div>
+
+        <div className="mt-14 flex justify-center">
+          <LuxLink href="/contact" variant="outline-light" size="lg">
+            Konsultasikan Kebutuhan Anda
+            <ArrowUpRight className="size-4" />
+          </LuxLink>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StatsSkeleton() {
+  return (
+    <section className="border-y border-white/10 bg-prime-black">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
+        {STATS_FALLBACK.map((s) => (
+          <div key={s.label} className="px-2 py-10 text-center lg:py-12">
+            <p className="font-display text-4xl font-semibold text-prime-gold lg:text-5xl animate-pulse">
+              {s.value}
+            </p>
+            <p className="mt-2 text-xs uppercase tracking-widest text-white/50">
+              {s.label}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FeaturedSkeleton() {
+  return (
+    <section id="unggulan" className="bg-prime-black py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-14">
+          <p className="eyebrow text-prime-gold">Koleksi Eksklusif</p>
+          <h2 className="mt-4 font-display text-4xl font-medium text-white sm:text-5xl">
+            Properti Unggulan
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-72 animate-pulse rounded-2xl border border-white/10 bg-white/5"
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =========================================================
+   Page — sync, langsung render hero tanpa nunggu DB.
+   Data-dependent section di-stream via Suspense.
+   ========================================================= */
+
+export default function LandingPage() {
   return (
     <>
       {/* ===== HERO ===== */}
       <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-prime-black">
-        {/* Foto latar */}
         <div className="absolute inset-0">
           <Image
             src={HERO_IMG}
@@ -103,67 +211,28 @@ export default async function LandingPage() {
           </div>
         </div>
 
-        {/* Indikator scroll */}
         <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 animate-fade delay-500 flex-col items-center gap-2 text-white/40 lg:flex">
           <span className="h-10 w-px bg-gradient-to-b from-prime-gold to-transparent" />
         </div>
       </section>
 
-      {/* ===== STATS ===== */}
-      <section className="border-y border-white/10 bg-prime-black">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
-          {STATS.map((s) => (
-            <div key={s.label} className="px-2 py-10 text-center lg:py-12">
-              <p className="font-display text-4xl font-semibold text-prime-gold lg:text-5xl">
-                {s.value}
-              </p>
-              <p className="mt-2 text-xs uppercase tracking-widest text-white/50">
-                {s.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* ===== STATS (streamed) ===== */}
+      <Suspense fallback={<StatsSkeleton />}>
+        <StatsSection />
+      </Suspense>
 
-      {/* ===== TIPE PROPERTI ===== */}
+      {/* ===== TIPE PROPERTI (statis) ===== */}
       <PropertyTypes />
 
-      {/* ===== PROPERTI UNGGULAN ===== */}
-      <section id="unggulan" className="bg-prime-black py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-14 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
-            <div>
-              <p className="eyebrow text-prime-gold">Koleksi Eksklusif</p>
-              <h2 className="mt-4 font-display text-4xl font-medium text-white sm:text-5xl">
-                Properti Unggulan
-              </h2>
-            </div>
-            <p className="max-w-sm text-sm leading-relaxed text-white/60">
-              Pilihan terbaik kami — hunian dan ruang komersial premium dengan
-              lokasi yang diincar.
-            </p>
-          </div>
+      {/* ===== PROPERTI UNGGULAN (streamed) ===== */}
+      <Suspense fallback={<FeaturedSkeleton />}>
+        <FeaturedSection />
+      </Suspense>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredProperties.map((property) => (
-              <FeaturedCard key={property.id} property={property} />
-            ))}
-          </div>
-
-          <div className="mt-14 flex justify-center">
-            <LuxLink href="/contact" variant="outline-light" size="lg">
-              Konsultasikan Kebutuhan Anda
-              <ArrowUpRight className="size-4" />
-            </LuxLink>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== MENGAPA PRIME PROPERTY ===== */}
+      {/* ===== MENGAPA PRIME PROPERTY (statis) ===== */}
       <section className="relative overflow-hidden bg-[#111] py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-            {/* Kiri: judul */}
             <div className="lg:sticky lg:top-28">
               <p className="eyebrow text-prime-gold">Mengapa Kami</p>
               <h2 className="mt-4 font-display text-4xl font-medium leading-tight text-white sm:text-5xl">
@@ -177,7 +246,6 @@ export default async function LandingPage() {
               <div className="gold-rule mt-10 w-40" />
             </div>
 
-            {/* Kanan: daftar value */}
             <div className="divide-y divide-white/10">
               {VALUE_PROPS.map((vp) => (
                 <div
@@ -205,10 +273,10 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ===== PROSES ===== */}
+      {/* ===== PROSES (statis) ===== */}
       <ProcessSteps />
 
-      {/* ===== CTA PENUTUP ===== */}
+      {/* ===== CTA PENUTUP (statis) ===== */}
       <section className="relative overflow-hidden bg-prime-black py-28">
         <div
           aria-hidden

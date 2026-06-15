@@ -104,7 +104,9 @@
       "Bash(dir prisma\\\\seed*.mjs prisma\\\\seed*.ts prisma\\\\seed*.js)",
       "Bash(dir prisma\\\\*.prisma)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(npx vercel *)"
     ]
   },
   "enabledMcpjsonServers": [
