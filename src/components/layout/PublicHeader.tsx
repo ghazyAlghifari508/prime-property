@@ -35,7 +35,7 @@ export function PublicHeader() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         solid
-          ? "border-b border-white/10 bg-prime-black/90 backdrop-blur-md"
+          ? "border-b border-white/10 bg-prime-black/95 backdrop-blur-sm"
           : "bg-transparent",
       )}
     >
@@ -44,7 +44,7 @@ export function PublicHeader() {
         <Link
           href="/"
           aria-label="Prime Property — Beranda"
-          className="flex items-center"
+          className="rounded-lg bg-white/90 px-3 py-1.5"
         >
           <Image
             src="/logo-prime-property.png"

@@ -6,17 +6,22 @@ import { KONTAK } from "@/lib/constants";
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-white/10 bg-prime-black text-white">
-
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3 lg:px-8">
         {/* Brand */}
         <div className="space-y-5">
-          <Image
-            src="/logo-prime-property.png"
-            alt="Prime Property"
-            width={180}
-            height={50}
-            className="h-12 w-auto object-contain"
-          />
+          <Link
+            href="/"
+            aria-label="Prime Property — Beranda"
+            className="inline-block rounded-lg bg-white/90 px-3 py-1.5"
+          >
+            <Image
+              src="/logo-prime-property.png"
+              alt="Prime Property"
+              width={180}
+              height={50}
+              className="h-12 w-auto object-contain"
+            />
+          </Link>
           <p className="max-w-xs text-sm leading-relaxed text-white/60">
             Properti pilihan, investasi terpercaya. Koleksi ruko dan villa
             terkurasi di kawasan paling strategis.
